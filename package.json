@@ -1,0 +1,26 @@
+{
+  "name": "stockpusherwa",
+  "version": "1.0.0",
+  "description": "Pushing you stock prices when it changes an amount",
+  "main": "stockpusherwa.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thedamian/StockPusherWA.git"
+  },
+  "keywords": [
+    "stock",
+    "whatsapp",
+    "whatsup",
+    "whatsupp",
+    "twilio"
+  ],
+  "author": "Damian Montero",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thedamian/StockPusherWA/issues"
+  },
+  "homepage": "https://github.com/thedamian/StockPusherWA#readme"
+}
