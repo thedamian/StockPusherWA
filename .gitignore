@@ -116,3 +116,5 @@ dist
 .pnp.*
 
 .env
+stocks.json
+package-lock.json
