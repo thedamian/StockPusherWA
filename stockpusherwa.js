@@ -62,6 +62,7 @@ app.get('/',  (req, res) => {
 */
 
 let TwillioReply = (messageText,res) => {
+	    const response = new MessagingResponse(); 
             response.message(messageText);
             res.set('Content-Type', 'text/xml');
             res.end(response.toString());
@@ -81,25 +82,30 @@ app.post("/wamessage",async (req,res)=> {
         const phone = req.body.From;
         console.log("Receive the following string: "+ text +" from phone: "+phone);
 
-        if (text.indexOf(" ") = -1)  {
+        if (text.indexOf(" ") == -1)  {
             BadTwillioReply(res); 
+	    console.log("Reply had no space");
             return;
         }
         let messageArray = text.split(" ");
-        if (messageArray != 2) {
+        if (messageArray.length != 2) {
             BadTwillioReply(res); 
+	    console.log("request had more than two words");
             return;
         }
         stockSymbol = messageArray[0];
         stockPrice = messageArray[1];
-        if (NaN(stockPrice)) {
-            BadTwillioReply(res); 
+        if (isNaN(stockPrice)) {
+            BadTwillioReply(res);
+            console.log("Request price was not a number");
             return;
         }
         let StockRealPrice = 0.00;
         try {
-            StockRealPrice = await getPrice(stock.stocksymbol);
+            StockRealPrice = await getPrice(stockSymbol);
         } catch(ex) {
+
+            console.log("request stock symbol was invalid as "+ stockSymbol);
             TwillioReply(`Invalid stock Symbol \nMessage should be {Symbol} {Price}\nExample:\nAAPL 120`,res);
             return;
         }
@@ -127,7 +133,11 @@ app.post("/wamessage",async (req,res)=> {
                 .push(newStock)
                 .write()
         }
+
+	TwillioReply(`Stock Added. \nYou'll be notified if ${stockSymbol} goes past ${stockPrice}. It's currently at ${StockRealPrice}`,res);
+
     } catch (ex) {
+	console.log(ex);
         BadTwillioReply(res); 
         return;
     }
