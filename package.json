@@ -4,7 +4,9 @@
   "description": "Pushing you stock prices when it changes an amount",
   "main": "stockpusherwa.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node stockpusherwa.js",
+    "dev": "nodemon stockpusherwa.js --ignore stocks.json"
   },
   "repository": {
     "type": "git",
@@ -22,5 +24,16 @@
   "bugs": {
     "url": "https://github.com/thedamian/StockPusherWA/issues"
   },
-  "homepage": "https://github.com/thedamian/StockPusherWA#readme"
+  "homepage": "https://github.com/thedamian/StockPusherWA#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "^4.1.1",
+    "lowdb": "^1.0.0",
+    "morgan": "^1.10.0",
+    "node-fetch": "^2.6.1",
+    "path": "^0.12.7",
+    "shortid": "^2.2.15",
+    "twilio": "^3.50.0"
+  }
 }

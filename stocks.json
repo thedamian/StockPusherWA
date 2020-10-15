@@ -1,0 +1,20 @@
+{
+  "stocks": [
+    {
+      "stocksymbol": "AAPL",
+      "price": 119.99,
+      "listeners": [
+        {
+          "phone": "+19545881459",
+          "price": 120.03,
+          "hit": true
+        },
+        {
+          "phone": "+15619453019",
+          "price": 129,
+          "hit": false
+        }
+      ]
+    }
+  ]
+}
