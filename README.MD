@@ -13,4 +13,9 @@ if your stock is higher or lower (you tell me) then I send you a whatsapp messag
 - npm i
 - npm start
 
+## To try the WhatsApp intergration
+- Push the app to any cloud/server available online or use [localhost.run](https://localhost.run) to get your local computer up on the internet.
+- Go to your [Twilio WhatsApp sandbox page](https://www.twilio.com/console/sms/whatsapp/sandbox) and enter url above with /wamessage at the end  in the `WHEN A MESSAGE COMES IN` section.
+- Follow the "join xxxx-yyyy" message in that same page and then send a message like 'AAPL 120' to the phone number listed.
+
 Enjoy!
