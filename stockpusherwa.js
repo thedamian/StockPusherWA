@@ -61,11 +61,12 @@ app.get('/',  (req, res) => {
       ]
 */
 
-let TwillioReply = (messageText,res) => {
+let TwillioReply = (messageText,res,phone) => {
 	    const response = new MessagingResponse(); 
-            response.message(messageText);
+   	    response.message(messageText);
             res.set('Content-Type', 'text/xml');
-            res.end(response.toString());
+            res.end(response.toString());   
+
 }
 let BadTwillioReply = (res) => {
     TwillioReply(`Invalid reply \nMessage should be {Symbol} {Price}\nExample:\nAAPL 120`,res);
@@ -81,11 +82,35 @@ app.post("/wamessage",async (req,res)=> {
         const text = req.body.Body.trim();
         const phone = req.body.From;
         console.log("Receive the following string: "+ text +" from phone: "+phone);
+	let stockSymbol = "";
+        let stockPrice = 0; 
+        let StockRealPrice = 0.00;
 
         if (text.indexOf(" ") == -1)  {
+	stockSymbol = text.trim();
+	if (stockSymbol == "" || stockSymbol.length > 5)
+	{
             BadTwillioReply(res); 
-	    console.log("Reply had no space");
+            console.log("request had more than two words");
             return;
+	}
+	// Just one word. Let's see if it's a stock symbol
+        try {
+            StockRealPrice = await getPrice(stockSymbol);
+        } catch(ex) {
+
+            console.log("request stock symbol was invalid as "+ stockSymbol);
+            TwillioReply(`Invalid stock Symbol`,res);
+            return;
+        }
+           TwillioReply(`${stockSymbol.toUpperCase()} is currently at ${StockRealPrice}`,res);
+
+	   SendWhatsApp(phone, "howdy");
+            return;
+
+            //BadTwillioReply(res); 
+	    //console.log("Reply had no space");
+            //return;
         }
         let messageArray = text.split(" ");
         if (messageArray.length != 2) {
@@ -100,7 +125,6 @@ app.post("/wamessage",async (req,res)=> {
             console.log("Request price was not a number");
             return;
         }
-        let StockRealPrice = 0.00;
         try {
             StockRealPrice = await getPrice(stockSymbol);
         } catch(ex) {
@@ -152,11 +176,15 @@ let getPrice = async (stocksymbol) =>  {
 }
 
 let SendWhatsApp = async (phoneNbr,messageText) => {
+    if (phoneNbr.indexOf("whatsapp") == -1)
+	{ phoneNbr = "whatsapp:"+phoneNbr; }
+
     let twilioMsg = await twilioSend.messages
     .create({
        body: messageText,
        from: 'whatsapp:+14155238886',
-       to: `whatsapp:${phoneNbr}`
+       to: phoneNbr,
+       mediaUrl: 'https://media.giphy.com/media/RetAhW00zEsYwLYZuC/giphy.mp4'
      });
      return twilioMsg.sid;
 }
