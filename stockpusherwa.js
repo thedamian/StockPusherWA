@@ -87,30 +87,29 @@ app.post("/wamessage",async (req,res)=> {
         let StockRealPrice = 0.00;
 
         if (text.indexOf(" ") == -1)  {
-	stockSymbol = text.trim();
-	if (stockSymbol == "" || stockSymbol.length > 5)
-	{
-            BadTwillioReply(res); 
-            console.log("request had more than two words");
-            return;
-	}
-	// Just one word. Let's see if it's a stock symbol
-        try {
-            StockRealPrice = await getPrice(stockSymbol);
-        } catch(ex) {
+                stockSymbol = text.trim();
+                if (stockSymbol == "" || stockSymbol.length > 4)
+                {
+                        BadTwillioReply(res); 
+                        console.log("no words (or more than 5)");
+                        return;
+                }
+                // Just one word. Let's see if it's a stock symbol
+                try {
+                    StockRealPrice = await getPrice(stockSymbol);
+                } catch(ex) {
 
-            console.log("request stock symbol was invalid as "+ stockSymbol);
-            TwillioReply(`Invalid stock Symbol`,res);
-            return;
-        }
-           TwillioReply(`${stockSymbol.toUpperCase()} is currently at ${StockRealPrice}`,res);
-
-	   SendWhatsApp(phone, "howdy");
-            return;
-
-            //BadTwillioReply(res); 
-	    //console.log("Reply had no space");
-            //return;
+                    console.log("request stock symbol was invalid as "+ stockSymbol);
+                    TwillioReply(`Invalid stock Symbol`,res);
+                    return;
+                }
+                if (StockRealPrice) {
+                TwillioReply(`${stockSymbol.toUpperCase()} is currently at ${StockRealPrice}`,res);
+                SendWhatsApp(phone, "howdy");
+                } else {
+                    TwillioReply(`${stockSymbol.toUpperCase()} doesn't seem to be a valid stock`);
+                }
+                return;
         }
         let messageArray = text.split(" ");
         if (messageArray.length != 2) {
@@ -236,7 +235,7 @@ let CheckStockPrices = async () => {
         Stocks = updatedStocks;
         console.log("damian");
         console.log("Stocks",Stocks);
-        console.log("listeners",Stocks[0].listeners);
+        console.log("listeners",Stocks[0]?.listeners);
     });
 
 }
